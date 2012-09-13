@@ -14,10 +14,6 @@
 <meta name="apple-mobile-web-app-status-bar-style"
     content="black-translucent" />
 
-<link
-    href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic'
-    rel='stylesheet' type='text/css'>
-
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/theme/default.css" id="theme">
 
@@ -49,7 +45,7 @@
 <p>@tomasfejfar</p>
 </section>
 <section>
-<h2>NástRoje optimalizace</h2>
+<h2>Nástroje optimalizace</h2>
 <div>
 <div>
 <ul>
@@ -67,10 +63,10 @@
 <h2>Profilování</h2>
 <div>
 <ul>
-    <li>Základ: VŠECHNO MĚŘIT</li>
-    <li>Data, data, data</li>
-    <li>Intuice</li>
-    <li>rychlost vs. přehlednost</li>
+    <li>základem je VŠECHNO MĚŘIT</li>
+    <li>data, data, data</li>
+    <li>intuice</li>
+    <li>rychlost vs. přehlednost kódu</li>
 </ul>
 </div>
 </section>
@@ -85,8 +81,66 @@
 </ul>
 </div>
 </section>
+
+<section>
+<h2>ab</h2>
+<div>
+<code>
+    ab -n 100 -c 1 http://localhost/
+</code>
+<pre>Requests per second:    6.91 [#/sec] (mean)</pre>
+<code><pre>              min  mean[+/-sd] median   max
+Connect:        1    1   1.8      1      19
+Processing:   215  276  77.2    264     948
+Waiting:      196  253  76.6    241     928
+Total:        216  277  77.2    266     949</pre></code>
+</div>
+</section>
+
+<section>
+<h2>xdebug + xcachegrind</h2>
+<div>
+Pro Windows je <a href="http://sourceforge.net/projects/wincachegrind/">WinCacheGrind</a>
+<pre>
+[XDebug]
+zend_extension = "C:\xampp\php\ext\php_xdebug.dll"
+xdebug.profiler_append = 0
+xdebug.profiler_enable = 1
+xdebug.profiler_enable_trigger = 0
+xdebug.profiler_output_dir = "C:/xampp/tmp/grind"
+xdebug.profiler_output_name = "%t-%s.cgrind"
+    
+</pre>
+<img src="img/xcachegrind.png">
+</div>
+</section>
+
+<section>
+<h2>Zend_Db_Profiler</h2>
+<div>
+<pre>
+$profiler = MyProject_Db_Profiler();
+$profiler->setEnabled(true);
+$params['profiler'] = $profiler;
+$db = Zend_Db::factory('PDO_MYSQL', $params);
+// ...
+$profiler->getQueryProfiles();
+</pre>
+</div>
+</section>
+
+<section>
+<h2>ZFDebug toolbar</h2>
+<div>
+<ul><li><a href="https://github.com/jokkedk/ZFDebug">Github</a>
+<img src="img/zfdebug.png">
+</div>
+</section>
+
 </section>
 <section>
+<section>
+
 <h2>Cachování</h2>
 <div>
 
@@ -96,25 +150,32 @@
         <li><code>Translate, Locale, Db_Table</code></li>
     </ul>
     <li>cachování generovaných věcí</li>
-    <ul>
-        <li>pozor na invalidaci</li>
-        <li>využití view helperů</li>
-        <li>nastavení správného TTL</li>
-        <li>neexpirující cache</li>
-    </ul>
-    <li>cachování částí templatů (smysl mají jen ty extrémně
-    náročné = menu z XML)</li>
-    <li>udělejte si statickou tříédu na získání cache - budete jí
-    rádi používat :)</li>
+    <li>Statická třída<br>
+<code>Cache::getCache();
+Cache::getForeverCache();
+//$convenience++;</code></li>
 </ul>
 
 </div>
 </section>
 <section>
+<h2>Generované věci</h2>
+<div>
+<ul>
+    <li>pozor na invalidaci</li>
+    <li>využití view helperů</li>
+    <li>nastavení správného TTL</li>
+    <li>neexpirující cache - řeší se při deploymentu</li>
+</ul>
+</section>
+</section>
+<section>
+<section>
 <h2>Optimalizace</h2>
 <div>
 <ul>
-    <li>include path, autoloader, classmap,superluminal</li>
+    <li>použít PHP 5.3 (v některých případech 30% proti 5.2.8)</li>
+	<li>include path, autoloader, classmap,superluminal</li>
     <li>path stack</li>
     <li>strip require_once</li>
     <li>minimalizace velkých souborů - velké cache, strip
@@ -122,8 +183,23 @@
 </ul>
 </div>
 </section>
+
 <section>
-<h2>OřEzávání</h2>
+<h2>Classmap</h2>
+<div>
+Vylepšený classmap autoloader generátor <a href="https://github.com/tomasfejfar/Improved-classmap-autoloader">na GitHubu</a>. 
+<ul>
+    <li>exclude</li>
+    <li>minimalizované proměnné</li>
+    <li>neobsahuje náhodnou proměnnou - lepší diff</li>
+</ul>
+</div>
+</section>
+
+
+</section>
+<section>
+<h2>Ořezávání</h2>
 <div>
 
 <ul>
@@ -141,9 +217,22 @@
 
 <ul>
     <li>zend optimizer / XCache</li>
-    <li>zvážit jediný ZF</li>
+    <li>jediný ZF pro celý server</li>
     <li>real_path cache</li>
     <li>lepší železo - levnější než vývojář</li>
+</ul>
+
+<br class="Apple-interchange-newline">
+</div>
+</section>
+
+<section>
+<h2>... a konec</h2>
+<div>
+
+<ul>
+    <li>http://www.tomasfejfar.cz</li>
+    <li>@tomasfejfar</li>
 </ul>
 
 <br class="Apple-interchange-newline">
